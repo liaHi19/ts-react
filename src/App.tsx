@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, PropsWithChildren, useCallback } from "react";
+import "./App.css";
 
-function App() {
+const Heading = ({ title }: { title: string }) => {
+  return <h2>{title}</h2>;
+};
+
+const Box: FC<PropsWithChildren> = ({ children }) => {
+  return <div>{children}</div>;
+};
+
+const List: FC<{ items: string[]; onClick?: (item: string) => void }> = ({
+  items,
+  onClick,
+}) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <ul>
+      {items.map((item, index) => (
+        <li
+          key={index}
+          onClick={() => {
+            onClick?.(item);
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const App = () => {
+  const onListClick = useCallback((item: string) => {
+    alert(item);
+  }, []);
+  return (
+    <div>
+      <Heading title="Introduction" />
+      <Box>
+        <p>Hello there</p>
+      </Box>
+      <List items={["one", "two", "three"]} onClick={onListClick} />
     </div>
   );
-}
+};
 
 export default App;
