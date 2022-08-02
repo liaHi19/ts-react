@@ -1,4 +1,10 @@
-import React, { FC, PropsWithChildren, useCallback } from "react";
+import React, {
+  FC,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import "./App.css";
 
 const Heading = ({ title }: { title: string }) => {
@@ -29,9 +35,21 @@ const List: FC<{ items: string[]; onClick?: (item: string) => void }> = ({
   );
 };
 
+interface Payload {
+  text: string;
+}
+
 const App = () => {
   const onListClick = useCallback((item: string) => {
     alert(item);
+  }, []);
+
+  const [payload, setPayload] = useState<Payload | null>(null);
+
+  useEffect(() => {
+    fetch("/data.json")
+      .then((res) => res.json())
+      .then((data) => setPayload(data));
   }, []);
   return (
     <div>
@@ -40,6 +58,7 @@ const App = () => {
         <p>Hello there</p>
       </Box>
       <List items={["one", "two", "three"]} onClick={onListClick} />
+      <Box>{JSON.stringify(payload)}</Box>
     </div>
   );
 };
