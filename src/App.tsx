@@ -37,6 +37,40 @@ const List: FC<{ items: string[]; onClick?: (item: string) => void }> = ({
   );
 };
 
+const useNumber = (initialValue: number) => useState<number>(initialValue);
+type UseNumberValue = ReturnType<typeof useNumber>[0];
+type UseSetNumberValue = ReturnType<typeof useNumber>[1];
+
+const Incrementor: FC<{
+  value: UseNumberValue;
+  setValue: UseSetNumberValue;
+}> = ({ value, setValue }) => {
+  return (
+    <button
+      onClick={() => {
+        setValue((prev) => prev + 1);
+      }}
+    >
+      Add - {value}
+    </button>
+  );
+};
+
+// const Incrementor: FC<{
+//   value: number;
+//   setValue: React.Dispatch<React.SetStateAction<number>>;
+// }> = ({ value, setValue }) => {
+//   return (
+//     <button
+//       onClick={() => {
+//         setValue((prev) => prev + 1);
+//       }}
+//     >
+//       Add - {value}
+//     </button>
+//   );
+// };
+
 interface Payload {
   text: string;
 }
@@ -57,6 +91,7 @@ const App = () => {
   }, []);
 
   const [payload, setPayload] = useState<Payload | null>(null);
+  const [value, setValue] = useNumber(0);
 
   const [todos, dispatch] = useReducer((state: Todo[], action: ActionType) => {
     switch (action.type) {
@@ -99,6 +134,8 @@ const App = () => {
       </Box>
       <List items={["one", "two", "three"]} onClick={onListClick} />
       <Box>{JSON.stringify(payload)}</Box>
+
+      <Incrementor value={value} setValue={setValue} />
 
       <Heading title="Todos" />
       <ul>
