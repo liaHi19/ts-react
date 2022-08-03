@@ -93,6 +93,25 @@ interface Payload {
   text: string;
 }
 
+function UL<T>({
+  items,
+  render,
+}: React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLUListElement>,
+  HTMLUListElement
+> & {
+  items: T[];
+  render: (item: T) => React.ReactNode;
+}) {
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{render(item)}</li>
+      ))}
+    </ul>
+  );
+}
+
 const App = () => {
   const { todos, addTodo, removeTodo } = useTodos([]);
   const onListClick = useCallback((item: string) => {
@@ -129,7 +148,22 @@ const App = () => {
       <Incrementor value={value} setValue={setValue} />
 
       <Heading title="Todos" />
-      <ul>
+      <UL
+        items={todos}
+        render={(todo) => (
+          <>
+            {todo.text}
+            <button
+              onClick={() => {
+                removeTodo(todo.id);
+              }}
+            >
+              Remove
+            </button>
+          </>
+        )}
+      />
+      {/* <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
             {todo.text}
@@ -142,7 +176,7 @@ const App = () => {
             </button>
           </li>
         ))}
-      </ul>
+      </ul> */}
       <div>
         <input type="text" ref={newTodoRef} />
         <button onClick={onAddTodo}>Add Todo</button>
