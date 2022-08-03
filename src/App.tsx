@@ -13,6 +13,24 @@ const Heading = ({ title }: { title: string }) => {
   return <h2>{title}</h2>;
 };
 
+const Button: FC<
+  React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > & {
+    title?: string;
+  }
+> = ({ title, children, style, ...rest }) => {
+  return (
+    <button
+      {...rest}
+      style={{ ...style, backgroundColor: "black", color: "white" }}
+    >
+      {title ?? children}
+    </button>
+  );
+};
+
 const Box: FC<PropsWithChildren> = ({ children }) => {
   return <div>{children}</div>;
 };
@@ -46,13 +64,12 @@ const Incrementor: FC<{
   setValue: UseSetNumberValue;
 }> = ({ value, setValue }) => {
   return (
-    <button
+    <Button
       onClick={() => {
         setValue((prev) => prev + 1);
       }}
-    >
-      Add - {value}
-    </button>
+      title={`Add - ${value}`}
+    />
   );
 };
 
