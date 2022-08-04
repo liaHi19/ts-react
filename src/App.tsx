@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import { useTodos } from "./useTodos";
+import { useTodos, useAddTodo, useRemoveTodo, TodosProvider } from "./useTodos";
 import "./App.css";
 
 const Heading = ({ title }: { title: string }) => {
@@ -113,7 +113,10 @@ function UL<T>({
 }
 
 const App = () => {
-  const { todos, addTodo, removeTodo } = useTodos([]);
+  const todos = useTodos();
+  const addTodo = useAddTodo();
+  const removeTodo = useRemoveTodo();
+
   const onListClick = useCallback((item: string) => {
     alert(item);
   }, []);
@@ -185,4 +188,15 @@ const App = () => {
   );
 };
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <TodosProvider initialTodos={[]}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
+        <App />
+        <App />
+      </div>
+    </TodosProvider>
+  );
+};
+
+export default AppWrapper;
